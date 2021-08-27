@@ -1,5 +1,6 @@
 import cv2
 import time
+import os
 
 # variables
 timer = 5
@@ -8,7 +9,12 @@ people = 1
 
 last_picture = timer
 
-face_cascade = cv2.CascadeClassifier('face.xml')
+
+def path(string: str) -> str:
+    return os.path.join(os.path.dirname(__file__), string)
+
+
+face_cascade = cv2.CascadeClassifier(path('face.xml'))
 
 video_capture = cv2.VideoCapture(0)
 face_locations = []
@@ -22,9 +28,10 @@ while True:
 
     if len(faces) >= people and time.time() - last_picture >= timer:
         print('taking picture')
-        print('blur amount:', cv2.Laplacian(frame, cv2.CV_64F).var())
+        blur = cv2.Laplacian(frame, cv2.CV_64F).var()
+        print('blur amount:', blur)
         cv2.imwrite(
-            f'img/{time.strftime("%d-%m-%Y_%H:%M:%S")}_{round(cv2.Laplacian(frame, cv2.CV_64F).var())}.png', frame)
+            path(f'img/{time.strftime("%d-%m-%Y_%H:%M:%S")}_{round(blur)}.png'), frame)
         last_picture = time.time()
 
     for (x, y, w, h) in faces:
