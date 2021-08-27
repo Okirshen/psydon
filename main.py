@@ -23,7 +23,8 @@ while True:
     if len(faces) >= people and time.time() - last_picture >= timer:
         print('taking picture')
         print('blur amount:', cv2.Laplacian(frame, cv2.CV_64F).var())
-        cv2.imwrite(f'img/{time.time()}.png', frame)
+        cv2.imwrite(
+            f'img/{time.strftime("%d-%m-%Y_%H:%M:%S")}_{round(cv2.Laplacian(frame, cv2.CV_64F).var())}.png', frame)
         last_picture = time.time()
 
     for (x, y, w, h) in faces:
